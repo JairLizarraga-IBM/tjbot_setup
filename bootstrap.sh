@@ -31,7 +31,7 @@ npm install --unsafe-perm
 # Node red service configuration
 sudo sed -i -e 's/User=pi/User=root/g' ex.service
 sudo systemctl daemon-reload
-
+# Cerrar ventana y abrir otra
 node-red-start
 
 node-red-stop
