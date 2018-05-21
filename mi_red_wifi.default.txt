@@ -1,0 +1,6 @@
+
+network={
+        ssid=""
+        psk=""
+        key_mgmt=WPA-PSK
+}
