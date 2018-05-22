@@ -2,7 +2,8 @@
 
 #Update dependences and install text to speech app
 apt-get update
-yes | apt-get install espeak
+update-nodejs-and-nodered
+apt-get install espeak
 
 #Enable speakable ip address
 mkdir -p /home/pi/scripts
