@@ -16,14 +16,6 @@ cp mi_red_wifi.txt /boot/
 #Enable ssh to start at boot
 systemctl enable ssh
 systemctl start ssh
-#!!!
-read -p "Would you like to change your RaspberryPI password? [Y/n] " choice </dev/tty
-case "$choice" in
-    "y" | "Y")
-        passwd
-        ;;
-    *) ;;
-esac
 
 #Habilitar camara
 echo "start_x=1" | tee -a /boot/config.txt
@@ -45,6 +37,11 @@ npm install --unsafe-perm
 sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
 systemctl daemon-reload
 systemctl enable nodered.service
+node-red-start &
+echo "Iniciando servidor"
+sleep 10
+echo "Deteniendo servidor"
+sleep 5
 
 # Renombrar usuario en javascript
 sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
