@@ -34,6 +34,7 @@ then
 	    espeak "Te has conectado a $SSID" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 		espeak "$MESSAGE" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 	    espeak -f $ROUTE  -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
+	fi
 else
 	espeak "Error en la conexiòn a internet" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 fi
