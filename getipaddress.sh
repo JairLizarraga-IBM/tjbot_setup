@@ -25,24 +25,15 @@ fi
 > $ROUTE
 echo $IP > $ROUTE
 sed -i 's/\./ punto /g' $ROUTE
-if [ ${#IP} -gt 0 ]
+if [ ${#IP} -eq 0 ]
 then
-        SSID="$(iwgetid -r)"
-        espeak "Te has conectado a $SSID" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
-	espeak "$MESSAGE" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
-        espeak -f $ROUTE  -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 	ping www.google.com -c 1
 	if [ "$?" -gt 0 ]
 	then
-		espeak "Conexiòn a internet fallida" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
-	else
-		espeak "Conexiòn a internet establecida" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
-		nc -z -v -w5 127.0.0.1 1880
-		if [ "$?" -eq 0 ]
-		then
-        		espeak "Servidor iniciado" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
-		fi
-	fi
+	    SSID="$(iwgetid -r)"
+	    espeak "Te has conectado a $SSID" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
+		espeak "$MESSAGE" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
+	    espeak -f $ROUTE  -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 else
 	espeak "Error en la conexiòn a internet" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE
 fi

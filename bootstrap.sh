@@ -1,17 +1,18 @@
 #!/bin/sh
 
+# Bootstrap es un script que habilita para su primer uso con TJBot la tarjeta Raspberry pi.
+# Tareas:
+# * Actualiza las librerías
+# * Habilita las conexiones ssh
+# * Habilita la camara
+# * La salida de audio se asigna en automático
+# * El volumen se ajusta a 50%
+# * Instalará los nodos de TJBot en Node-Red
+# * Se modifican los permisos de nodered para el usuario actual.
+# * Finalmente, se reinicia.
+
 #Update dependences and install text to speech app
 apt-get update
-apt-get install espeak
-
-#Enable speakable ip address
-mkdir -p /home/pi/scripts
-cp getipaddress.sh /home/pi/scripts/
-sed -i -e "s/exit 0/sleep 15; \/home\/pi\/scripts\/getipaddress.sh || exit 1; exit 0;/g" /etc/rc.local
-
-#Enable Wi-Fi bootable configuration
-cp mi_red_wifi.default.txt /boot/
-cp mi_red_wifi.txt /boot/
 
 #Enable ssh to start at boot
 systemctl enable ssh
@@ -40,6 +41,7 @@ systemctl enable nodered.service
 node-red-start &
 echo "Iniciando servidor"
 sleep 10
+node-red-stop
 echo "Deteniendo servidor"
 sleep 5
 
