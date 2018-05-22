@@ -2,7 +2,6 @@
 
 #Update dependences and install text to speech app
 apt-get update
-update-nodejs-and-nodered
 apt-get install espeak
 
 #Enable speakable ip address
