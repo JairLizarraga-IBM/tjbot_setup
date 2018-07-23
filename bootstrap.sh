@@ -28,14 +28,16 @@ amixer sset 'PCM' 50%
 # Node red update/install
 node-red-stop
 cd /home/pi/.node-red
+npm i node-red-node-watson
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
 git clone https://github.com/jeancarl/node-red-contrib-tjbot
 cd /home/pi/.node-red/nodes/node-red-contrib-tjbot
 npm install --unsafe-perm
 
+
 # Node red service configuration
-sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
+sudo sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
 systemctl daemon-reload
 systemctl enable nodered.service
 node-red-start &
