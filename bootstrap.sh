@@ -28,7 +28,6 @@ amixer sset 'PCM' 50%
 # Node red update/install
 node-red-stop
 cd /home/pi/.node-red
-npm i node-red-node-watson
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
 git clone https://github.com/jeancarl/node-red-contrib-tjbot
