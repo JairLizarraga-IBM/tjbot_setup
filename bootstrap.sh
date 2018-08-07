@@ -3,6 +3,7 @@
 # Bootstrap es un script que habilita para su primer uso con TJBot la tarjeta Raspberry pi.
 # Tareas:
 # * Actualiza las librerías
+# * Instala un teclado virtual para su uso con mouse
 # * Habilita las conexiones ssh
 # * Habilita la camara
 # * La salida de audio se asigna en automático
@@ -13,6 +14,8 @@
 
 #Update dependences and install text to speech app
 apt-get update
+apg-get install matchbox-keyboard -y
+cp keyboard.sh /home/pi/Desktop/
 
 #Enable ssh to start at boot
 systemctl enable ssh
