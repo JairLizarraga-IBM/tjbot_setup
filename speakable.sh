@@ -15,4 +15,5 @@ sed -i -e "s/exit 0/sleep 15; \/home\/pi\/scripts\/getipaddress.sh || exit 1; ex
 #Enable Wi-Fi bootable configuration
 cp mi_red_wifi.default.txt /boot/
 cp mi_red_wifi.txt /boot/
+cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
 reboot now

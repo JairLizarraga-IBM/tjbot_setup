@@ -13,13 +13,22 @@ LENGUAJE=es+m5
 
 # Busca si existe una nueva red agregada manualmente por el usuario
 NEWSSID="$(grep 'ssid' /boot/mi_red_wifi.txt)"
-if [ ${#NEWSSID} -gt 15 ];
+if [ ${#NEWSSID} -gt 15 ]
 then
 	cat $BOOT_WPA >> $WPA_SUPPLICANT
 	cp /boot/mi_red_wifi.default.txt /boot/mi_red_wifi.txt
         espeak "Nueva configuración wai fai detectada. Reiniciando." -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE -s $SPEED
 	sudo reboot
+# Si el usuario ha introducido mal una red y a causa de eso se ha perdido conectividad remota, el usuario
+# debera escribir en el archivo /boot/mi_red_wifi.txt la palabra restart, sin espacios y en el primer renglon.
+# Esto limpiara las redes recordadas, y podra volver a agregar redes por medio de la tarjeta SD.
+elif [ "$(head -n 1 $BOOT_WPA)" = "restart" ]; then
+	espeak "Reiniciando lista de redes conocidas. Despues de reiniciar, puedes agregar de nuevo tu red." -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE -s $SPEED
+	cp /etc/wpa_supplicant/wpa_supplicant.default.conf /etc/wpa_supplicant/wpa_supplicant.conf
+	cp /boot/mi_red_wifi.default.txt /boot/mi_red_wifi.txt
+	sudo reboot
 fi
+sleep 5
 
 # Se vacia la direccion IP en archivo, para modificar su texto y poder hablarlo
 if [ ! -z "$IP" ];
