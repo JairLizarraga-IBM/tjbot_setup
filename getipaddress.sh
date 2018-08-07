@@ -24,7 +24,7 @@ fi
 # Se vacia la direccion IP en archivo, para modificar su texto y poder hablarlo
 if [ ! -z "$IP" ];
 then
-	if [[ $(cat /sys/class/net/eth0/operstate) -eq 'up' ]];
+	if [[ $(cat /sys/class/net/eth0/operstate) = "up" ]];
 	then
 		 espeak "Iniciando con conexion alambrica" -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE -s $SPEED
 	else
