@@ -14,7 +14,7 @@
 
 #Update dependences and install text to speech app
 apt-get update
-apg-get install matchbox-keyboard -y
+apt-get install matchbox-keyboard -y
 cp keyboard.sh /home/pi/Desktop/
 
 #Enable ssh to start at boot

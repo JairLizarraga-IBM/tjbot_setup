@@ -5,7 +5,7 @@
 # necesidad de una pantalla, mouse ni teclado.
 
 apt-get update
-apt-get install espeak
+apt-get install espeak -y
 
 #Enable speakable ip address
 mkdir -p /home/pi/scripts
