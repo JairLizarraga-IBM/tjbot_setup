@@ -26,7 +26,7 @@ echo "start_x=1" | tee -a /boot/config.txt
 #Set audio output to automatic
 amixer cset numid=3 0
 #Set volume to 50%
-amixer sset 'PCM' 50%
+amixer sset 'PCM' 75%
 
 # Node red update/install
 node-red-stop
