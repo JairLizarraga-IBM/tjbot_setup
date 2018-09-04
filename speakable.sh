@@ -10,7 +10,7 @@ apt-get install espeak -y
 #Enable speakable ip address
 mkdir -p /home/pi/scripts
 cp getipaddress.sh /home/pi/scripts/
-sed -i -e "s/exit 0/sleep 15; \/home\/pi\/scripts\/getipaddress.sh || exit 1; exit 0;/g" /etc/rc.local
+sed -i -e "s/exit 0/espeak 'starting'; sleep 15; \/home\/pi\/scripts\/getipaddress.sh || exit 1; exit 0;/g" /etc/rc.local
 
 #Enable Wi-Fi bootable configuration
 cp mi_red_wifi.default.txt /boot/
