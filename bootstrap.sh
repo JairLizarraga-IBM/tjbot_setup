@@ -25,6 +25,8 @@ systemctl start ssh
 echo "start_x=1" | tee -a /boot/config.txt
 #Set audio output to automatic
 amixer cset numid=3 0
+#Set USB Audio as default
+cp sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf
 #Set volume to 50%
 amixer sset 'PCM' 75%
 
