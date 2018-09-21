@@ -51,6 +51,11 @@ node-red-stop
 echo "Deteniendo servidor"
 sleep 5
 
+# Completando actualizaciones de IBM Watson debidas a la autenticación
+sudo cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
+sudo cp config.html /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.html
+sudo cp tjbot.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/node_modules/tjbot/lib/tjbot.js
+
 # Renombrar usuario en javascript
 sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
 sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/pi\/.node-red\/nodes',/g" /root/.node-red/settings.js
