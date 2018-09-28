@@ -35,8 +35,8 @@ node-red-stop
 cd /home/pi/.node-red
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
-# git clone https://github.com/jeancarl/node-red-contrib-tjbot
-git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
+git clone https://github.com/jeancarl/node-red-contrib-tjbot
+# git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
 cd /home/pi/.node-red/nodes/node-red-contrib-tjbot
 npm install --unsafe-perm
 
