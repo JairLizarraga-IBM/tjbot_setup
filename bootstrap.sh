@@ -35,6 +35,7 @@ node-red-stop
 cd /home/pi/.node-red
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
+
 git clone https://github.com/jeancarl/node-red-contrib-tjbot
 # git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
 cd /home/pi/.node-red/nodes/node-red-contrib-tjbot
@@ -42,7 +43,7 @@ npm install --unsafe-perm
 
 
 # Node red service configuration
-sudo sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
+sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
 systemctl daemon-reload
 systemctl enable nodered.service
 node-red-start &
@@ -51,6 +52,11 @@ sleep 10
 node-red-stop
 echo "Deteniendo servidor"
 sleep 5
+
+# Completando actualizaciones de IBM Watson debidas a la autenticación
+cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
+cp config.html /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.html
+cp tjbot.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/node_modules/tjbot/lib/tjbot.js
 
 # Renombrar usuario en javascript
 sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js

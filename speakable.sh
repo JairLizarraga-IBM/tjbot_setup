@@ -7,11 +7,6 @@
 apt-get update
 apt-get install espeak -y
 
-# Completando actualizaciones de IBM Watson debidas a la autenticación
-cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
-cp config.html /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.html
-cp tjbot.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/node_modules/tjbot/lib/tjbot.js
-
 #Enable speakable ip address
 mkdir -p /home/pi/scripts
 cp getipaddress.sh /home/pi/scripts/
