@@ -360,14 +360,14 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
             break;
 
         case 'language_translator':
-            //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
-            //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
-            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
+            assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
+            assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
 
-            var LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
-            this._languageTranslator = new LanguageTranslatorV3({
-                iam_apikey: credentials['apikey'],
-                version: '2018-05-01',
+            var LanguageTranslatorV2 = require('watson-developer-cloud/language-translator/v2');
+            this._languageTranslator = new LanguageTranslatorV2({
+                username: credentials['username'],
+                password: credentials['password'],
+                version: 'v2',
                 url: 'https://gateway.watsonplatform.net/language-translator/api/'
             });
 
@@ -434,10 +434,15 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
             // https://www.ibm.com/watson/developercloud/visual-recognition/api/v3/node.html?node#authentication
             if (credentials['api_key'] != undefined) {
                 this._visualRecognition = new VisualRecognitionV3({
-                    iam_apikey: credentials['api_key'],
+                    api_key: credentials['api_key'],
                     version: '2018-03-19'
                 });
-            }else {
+            } else if (credentials['iam_apikey'] != undefined) {
+                this._visualRecognition = new VisualRecognitionV3({
+                    api_key: credentials['iam_apikey'],
+                    version: '2018-03-19'
+                });
+            } else {
                 throw new Error(
                     'No authentication credentials specified for visual_recognition service.');
             }
@@ -1315,7 +1320,7 @@ TJBot.prototype._loadLanguageTranslations = function() {
     var self = this;
     return new Promise(function(resolve, reject) {
         if (self._translations == undefined) {
-            self._languageTranslator.listModels({}, function(err, models) {
+            self._languageTranslator.getModels({}, function(err, models) {
                 var translations = {};
                 if (err) {
                     winston.error("unable to retrieve list of language models for translation", err);
