@@ -6,12 +6,10 @@
 
 apt-get update
 apt-get install espeak -y
+apt-get install speech-dispatcher -y
 
-#Enable speakable ip address
-mkdir -p /home/pi/scripts
-cp getipaddress.sh /home/pi/scripts/
-sed -i -e "s/exit 0/espeak 'starting'; sleep 15; \/home\/pi\/scripts\/getipaddress.sh || exit 1; exit 0;/g" /etc/rc.local
-
+#Enable speakable ip address on startup
+mv rc.local /etc/rc.local
 
 # Completando actualizaciones de IBM Watson debidas a la autenticación
 cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js

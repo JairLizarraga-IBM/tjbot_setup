@@ -27,8 +27,19 @@ echo "start_x=1" | tee -a /boot/config.txt
 amixer cset numid=3 0
 #Set USB Audio as default
 cp sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf
-#Set volume to 50%
-amixer sset 'PCM' 75%
+#Set volume to 90%
+amixer sset 'PCM' 90%
+
+# For RPI 3B+, we need alsa-base.conf to configure sound card index
+# to 0, otherwise we put the file in desktop just if we need it later.
+echo "¿El modelo de tu Raspberry es la 3 B+?"
+read yn
+case $yn in
+	#Set audio card 1 to 0
+    Yes ) mv alsa-base.conf /etc/modprobe.d/alsa-base.conf; break;;
+    No ) mv alsa-base.conf ~/Desktop/alsa-base.conf;;
+esac
+
 
 # Node red update/install
 node-red-stop
