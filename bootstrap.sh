@@ -13,6 +13,7 @@
 # * Finalmente, se reinicia.
 
 #Update dependences and install text to speech app
+rpi-update
 apt-get update
 apt-get install matchbox-keyboard -y
 cp keyboard.sh /home/pi/Desktop/
@@ -29,16 +30,8 @@ amixer cset numid=3 0
 cp sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf
 #Set volume to 90%
 amixer sset 'PCM' 90%
-
-# For RPI 3B+, we need alsa-base.conf to configure sound card index
-# to 0, otherwise we put the file in desktop just if we need it later.
-echo "¿El modelo de tu Raspberry es la 3 B+?"
-read yn
-case $yn in
-	#Set audio card 1 to 0
-    Yes ) mv alsa-base.conf /etc/modprobe.d/alsa-base.conf; break;;
-    No ) mv alsa-base.conf ~/Desktop/alsa-base.conf;;
-esac
+#This file is if we have problems with sound cards in the most recent RPI 3B+ devices, put in /etc/modprobe.d/alsa-base.conf if needed
+mv /home/pi/tjbot_setup/alsa-base.conf /home/pi/Desktop/alsa-base.conf
 
 
 # Node red update/install

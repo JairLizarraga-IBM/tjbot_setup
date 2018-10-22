@@ -8,8 +8,8 @@ apt-get update
 apt-get install espeak -y
 apt-get install speech-dispatcher -y
 
-#Enable speakable ip address on startup
-mv rc.local /etc/rc.local
+#Enable speakable ip address on startup with a crontab task, we use the user pi for this job
+su pi -c "(crontab -l 2>/dev/null; echo '@reboot /home/pi/tjbot_setup/getipaddress.sh') | crontab -"
 
 # Completando actualizaciones de IBM Watson debidas a la autenticación
 cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
