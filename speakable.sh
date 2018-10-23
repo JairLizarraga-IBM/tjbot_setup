@@ -4,7 +4,6 @@
 # la raspberry pi se reinicie. De esta manera, se podrá hacer conexión remota sin
 # necesidad de una pantalla, mouse ni teclado.
 
-apt-get update
 apt-get install espeak -y
 apt-get install speech-dispatcher -y
 

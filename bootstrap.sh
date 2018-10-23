@@ -14,7 +14,6 @@
 
 #Update dependences and install text to speech app
 rpi-update
-apt-get update
 apt-get install matchbox-keyboard -y
 cp keyboard.sh /home/pi/Desktop/
 
