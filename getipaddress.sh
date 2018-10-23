@@ -14,9 +14,9 @@ LENGUAJE=es+m5
 NEWSSID="$(grep 'ssid' /boot/mi_red_wifi.txt)"
 if [ ${#NEWSSID} -gt 15 ]
 then
-	cat $BOOT_WPA >> $WPA_SUPPLICANT
-	cp /boot/mi_red_wifi.default.txt /boot/mi_red_wifi.txt
-        espeak "Nueva configuración wai fai detectada. Reiniciando." -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE -s $SPEED
+    sudo bash -c "cat /boot/mi_red_wifi.txt >> /etc/wpa_supplicant/wpa_supplicant.conf"
+    sudo cp /boot/mi_red_wifi.default.txt /boot/mi_red_wifi.txt
+    espeak "Nueva configuración wai fai detectada. Reiniciando." -k $ENFASIS -a $VOLUME  -p $PINCH -g $PAUSA -v $LENGUAJE -s $SPEED
 	sudo reboot
 # Si el usuario ha introducido mal una red y a causa de eso se ha perdido conectividad remota, el usuario
 # debera escribir en el archivo /boot/mi_red_wifi.txt la palabra restart, sin espacios y en el primer renglon.
