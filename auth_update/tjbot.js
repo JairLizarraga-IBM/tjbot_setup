@@ -151,22 +151,22 @@ TJBot.prototype.services = ['assistant', 'language_translator', 'speech_to_text'
  */
 TJBot.prototype.defaultConfiguration = {
     log: {
-        level: 'info' // valid levels are 'error', 'warn', 'info', 'verbose', 'debug', 'silly'
+        level: 'silly' // valid levels are 'error', 'warn', 'info', 'verbose', 'debug', 'silly'
     },
     robot: {
-        gender: 'male', // see TJBot.prototype.genders
+        gender: 'female', // see TJBot.prototype.genders
         name: 'Watson'
     },
     listen: {
         microphoneDeviceId: "plughw:1,0", // plugged-in USB card 1, device 0; see `arecord -l` for a list of recording devices
         inactivityTimeout: -1, // -1 to never timeout or break the connection. Set this to a value in seconds e.g 120 to end connection after 120 seconds of silence
-        language: 'en-US' // see TJBot.prototype.languages.listen
+        language: 'es-ES' // see TJBot.prototype.languages.listen
     },
     wave: {
         servoPin: 7 // corresponds to BCM 7 / physical PIN 26
     },
     speak: {
-        language: 'en-US', // see TJBot.prototype.languages.speak
+        language: 'es-ES', // see TJBot.prototype.languages.speak
         voice: undefined, // use a specific voice; if undefined, a voice is chosen based on robot.gender and speak.language
         speakerDeviceId: "plughw:0,0" // plugged-in USB card 1, device 0; `see aplay -l` for a list of playback devices
     },
@@ -181,7 +181,7 @@ TJBot.prototype.defaultConfiguration = {
             verticalFlip: false, // flips the image vertically, may need to set to 'true' if the camera is installed upside-down
             horizontalFlip: false // flips the image horizontally, should not need to be overridden
         },
-        language: 'en'
+        language: 'es'
     }
 };
 
@@ -236,7 +236,6 @@ TJBot.prototype._setupCamera = function() {
  */
 TJBot.prototype._setupLED = function() {
     winston.verbose("TJBot initializing LED");
-
     var ws281x = require('rpi-ws281x-native');
 
     // init with 1 LED
@@ -343,17 +342,25 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
 
     switch (service) {
         case 'assistant':
-            assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
-            assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
+            //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
 
             var AssistantV1 = require('watson-developer-cloud/assistant/v1');
+
+            this._assistant = new AssistantV1({
+              version: '2018-09-20',
+              iam_apikey: credentials['apikey'],
+              url: 'https://gateway.watsonplatform.net/assistant/api'
+            });
+            /*
             this._assistant = new AssistantV1({
                 username: credentials['username'],
                 password: credentials['password'],
                 url: 'https://gateway.watsonplatform.net/assistant/api/',
                 version: '2018-02-16'
-            });
-
+             });
+            */
             // cache of conversation contexts. hash key is the workspaceId of the conversation,
             // allowing TJ to run multiple conversations at once.
             this._assistantContext = {};
@@ -362,8 +369,7 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
         case 'language_translator':
             //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
             //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
-            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
-
+            
             var LanguageTranslatorV3 = require('watson-developer-cloud/language-translator/v3');
             this._languageTranslator = new LanguageTranslatorV3({
                 iam_apikey: credentials['apikey'],
@@ -378,28 +384,34 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
             break;
 
         case 'speech_to_text':
-            assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
-            assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
+            //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
 
             var SpeechToTextV1 = require('watson-developer-cloud/speech-to-text/v1');
+
             this._stt = new SpeechToTextV1({
-                username: credentials['username'],
-                password: credentials['password'],
-                url: 'https://stream.watsonplatform.net/speech-to-text/api/',
-                version: 'v1'
+                iam_apikey: credentials['apikey'],
+                url: 'https://stream.watsonplatform.net/speech-to-text/api'
             });
+
+            //this._stt = new SpeechToTextV1({
+            //    username: credentials['username'],
+            //    password: credentials['password'],
+            //    url: 'https://stream.watsonplatform.net/speech-to-text/api/',
+            //    version: 'v1'
+            //});
             break;
 
         case 'text_to_speech':
-            assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
-            assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
+            //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
 
             var TextToSpeechV1 = require('watson-developer-cloud/text-to-speech/v1');
             this._tts = new TextToSpeechV1({
-                username: credentials['username'],
-                password: credentials['password'],
-                url: 'https://stream.watsonplatform.net/text-to-speech/api/',
-                version: 'v1'
+                iam_apikey: credentials['apikey'],
+                url: 'https://stream.watsonplatform.net/text-to-speech/api'
             });
 
             this._tts.listVoices(null, function(error, data) {
@@ -413,16 +425,24 @@ TJBot.prototype._createServiceAPI = function(service, credentials) {
             break;
 
         case 'tone_analyzer':
-            assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
-            assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
-
+            //assert(credentials.hasOwnProperty('username'), "credentials for the " + service + " service missing 'username'");
+            //assert(credentials.hasOwnProperty('password'), "credentials for the " + service + " service missing 'password'");
+            assert(credentials.hasOwnProperty('apikey'), "credentials for the " + service + " service missing 'apikey'");
+            
             var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+
             this._toneAnalyzer = new ToneAnalyzerV3({
-                username: credentials['username'],
-                password: credentials['password'],
                 version: '2016-05-19',
-                url: 'https://gateway.watsonplatform.net/tone-analyzer/api/'
+                iam_apikey: credentials['apikey'],
+                url: 'https://gateway.watsonplatform.net/tone-analyzer/api'
             });
+
+            //this._toneAnalyzer = new ToneAnalyzerV3({
+            //    username: credentials['username'],
+            //    password: credentials['password'],
+            //    version: '2016-05-19',
+            //    url: 'https://gateway.watsonplatform.net/tone-analyzer/api/'
+            //});
             break;
 
         case 'visual_recognition':
@@ -666,10 +686,10 @@ TJBot.prototype.listen = function(callback) {
         params.inactivity_timeout = this.configuration.listen.inactivityTimeout;
     }
     
-    winston.silly("createRecognizeStream() params:");
+    winston.silly("recognizeUsingWebSocket() params:");
     winston.silly(params);
     
-    this._recognizeStream = this._stt.createRecognizeStream(params);
+    this._recognizeStream = this._stt.recognizeUsingWebSocket(params);
     
     // create the mic -> STT recognizer -> text stream
     this._sttTextStream = this._micInputStream.pipe(this._recognizeStream);
