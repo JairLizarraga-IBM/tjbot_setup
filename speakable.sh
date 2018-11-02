@@ -11,10 +11,10 @@ apt-get install speech-dispatcher -y
 su pi -c "(crontab -l 2>/dev/null; echo '@reboot /home/pi/tjbot_setup/getipaddress.sh') | crontab -"
 
 # Completando actualizaciones de IBM Watson debidas a la autenticación
-cp config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
-cp config.html /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.html
-cp tjbot.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/node_modules/tjbot/lib/tjbot.js
-
+cp auth_update/config.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.js
+cp auth_update/config.html /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/config.html
+cp auth_update/tjbot.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/node_modules/tjbot/lib/tjbot.js
+cp auth_update/translate.js /home/pi/.node-red/nodes/node-red-contrib-tjbot/tjbot/translate.js
 
 #Enable Wi-Fi bootable configuration
 cp mi_red_wifi.default.txt /boot/
