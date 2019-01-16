@@ -13,6 +13,8 @@
 # * Finalmente, se reinicia.
 
 #Update dependences and install text to speech app
+apt-get install espeak -y
+apt-get install speech-dispatcher -y
 apt-get install matchbox-keyboard -y
 cp keyboard.sh /home/pi/Desktop/
 
@@ -41,8 +43,8 @@ cd /home/pi/.node-red/nodes
 git clone https://github.com/jeancarl/node-red-contrib-tjbot
 # git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
 cd /home/pi/.node-red/nodes/node-red-contrib-tjbot
+sed -i -e 's/\"dependencies\": {/\"dependencies\": {\n    \"rpi-ws281x-native\": \"^0.9.0\",\n    \"pigpio\": \"^1.2.1\",/g' /home/pi/.node-red/nodes/node-red-contrib-tjbot/package.json
 npm install --unsafe-perm
-
 
 # Node red service configuration
 sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
@@ -58,4 +60,14 @@ sleep 5
 # Renombrar usuario en javascript
 sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
 sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/pi\/.node-red\/nodes',/g" /root/.node-red/settings.js
+
+#Enable speakable ip address on startup with a crontab task, we use the user pi for this job
+su pi -c "(crontab -l 2>/dev/null; echo '@reboot /home/pi/tjbot_setup/getipaddress.sh') | crontab -"
+
+#Enable Wi-Fi bootable configuration
+cp mi_red_wifi.default.txt /boot/
+cp mi_red_wifi.txt /boot/
+cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
+
+
 reboot now
