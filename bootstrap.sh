@@ -65,9 +65,9 @@ sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/p
 su pi -c "(crontab -l 2>/dev/null; echo '@reboot /home/pi/tjbot_setup/getipaddress.sh') | crontab -"
 
 #Enable Wi-Fi bootable configuration
-cp mi_red_wifi.default.txt /boot/
-cp mi_red_wifi.txt /boot/
-cp wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
+cp /home/pi/tjbot_setup/mi_red_wifi.default.txt /boot/
+cp /home/pi/tjbot_setup/mi_red_wifi.txt /boot/
+cp /home/pi/tjbot_setup/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
 
 
 reboot now
