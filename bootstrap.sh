@@ -40,9 +40,9 @@ cd /home/pi/.node-red
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
 
-git clone https://github.com/jeancarl/node-red-contrib-tjbot
+git clone https://github.com/JairLizarraga-IBM/nodes-tjbot-latam
 # git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
-cd /home/pi/.node-red/nodes/node-red-contrib-tjbot
+cd /home/pi/.node-red/nodes/nodes-tjbot-latam
 sed -i -e 's/\"dependencies\": {/\"dependencies\": {\n    \"rpi-ws281x-native\": \"^0.9.0\",\n    \"pigpio\": \"^1.2.1\",/g' /home/pi/.node-red/nodes/node-red-contrib-tjbot/package.json
 npm install --unsafe-perm
 
