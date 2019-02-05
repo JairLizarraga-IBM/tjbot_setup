@@ -33,12 +33,19 @@ amixer sset 'PCM' 90%
 #This file is if we have problems with sound cards in the most recent RPI 3B+ devices, put in /etc/modprobe.d/alsa-base.conf if needed
 mv /home/pi/tjbot_setup/alsa-base.conf /home/pi/Desktop/alsa-base.conf
 
+
+# Updating nodejs and nodered
+git clone https://github.com/node-red/raspbian-deb-package.git
+cd raspbian-deb-package/resources/
+./update-nodejs-and-nodered
+
 # Node red update/install
 node-red-stop
 cd /home/pi/.node-red
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
 
+# Installing TJBot nodes
 git clone https://github.com/JairLizarraga-IBM/nodes-tjbot-latam
 cd /home/pi/.node-red/nodes/nodes-tjbot-latam
 npm install --unsafe-perm
