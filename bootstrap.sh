@@ -33,7 +33,6 @@ amixer sset 'PCM' 90%
 #This file is if we have problems with sound cards in the most recent RPI 3B+ devices, put in /etc/modprobe.d/alsa-base.conf if needed
 mv /home/pi/tjbot_setup/alsa-base.conf /home/pi/Desktop/alsa-base.conf
 
-
 # Node red update/install
 node-red-stop
 cd /home/pi/.node-red
@@ -41,9 +40,7 @@ mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
 
 git clone https://github.com/JairLizarraga-IBM/nodes-tjbot-latam
-# git clone https://github.com/JairLizarraga-IBM/node-red-contrib-tjbot
 cd /home/pi/.node-red/nodes/nodes-tjbot-latam
-sed -i -e 's/\"dependencies\": {/\"dependencies\": {\n    \"rpi-ws281x-native\": \"^0.9.0\",\n    \"pigpio\": \"^1.2.1\",/g' /home/pi/.node-red/nodes/node-red-contrib-tjbot/package.json
 npm install --unsafe-perm
 
 # Node red service configuration
