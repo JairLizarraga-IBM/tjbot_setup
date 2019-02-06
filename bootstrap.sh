@@ -37,15 +37,16 @@ mv /home/pi/tjbot_setup/alsa-base.conf /home/pi/Desktop/alsa-base.conf
 # Updating nodejs and nodered
 git clone https://github.com/node-red/raspbian-deb-package.git
 cd raspbian-deb-package/resources/
-./update-nodejs-and-nodered
+# Executing with user pi
+su pi -c " ./update-nodejs-and-nodered"
+echo "Finalizando actualizacíon nodejs y nodered"
+sleep 5
 
-# Node red update/install
+# Installing TJBot nodes
 node-red-stop
 cd /home/pi/.node-red
 mkdir /home/pi/.node-red/nodes
 cd /home/pi/.node-red/nodes
-
-# Installing TJBot nodes
 git clone https://github.com/JairLizarraga-IBM/nodes-tjbot-latam
 cd /home/pi/.node-red/nodes/nodes-tjbot-latam
 npm install --unsafe-perm
@@ -61,7 +62,7 @@ node-red-stop
 echo "Deteniendo servidor"
 sleep 5
 
-# Renombrar usuario en javascript
+# Renaming user at node-red service
 sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
 sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/pi\/.node-red\/nodes',/g" /root/.node-red/settings.js
 
