@@ -1,78 +1,77 @@
 #!/bin/sh
-
-# Bootstrap es un script que habilita para su primer uso con TJBot la tarjeta Raspberry pi.
-# Tareas:
-# * Actualiza las librerías
-# * Instala un teclado virtual para su uso con mouse
-# * Habilita las conexiones ssh
-# * Habilita la camara
-# * La salida de audio se asigna en automático
-# * El volumen se ajusta a 50%
-# * Instalará los nodos de TJBot en Node-Red
-# * Se modifican los permisos de nodered para el usuario actual.
-# * Finalmente, se reinicia.
+# Script that enables TJBot project in a new recent Raspbian OS installation.
 
 #Update dependences and install text to speech app
-apt-get install espeak -y
-apt-get install speech-dispatcher -y
-apt-get install matchbox-keyboard -y
-cp keyboard.sh /home/pi/Desktop/
+installResources(){
+	apt-get install espeak -y
+	apt-get install speech-dispatcher -y
+	apt-get install matchbox-keyboard -y
+	cp ./config_files/keyboard.sh ~/Desktop/
+}
 
-#Enable ssh to start at boot
-systemctl enable ssh
-systemctl start ssh
+# Enable ssh to start at boot
+enableSSH(){
+	systemctl enable ssh
+	systemctl start ssh
+}
 
-#Habilitar camara
-echo "start_x=1" | tee -a /boot/config.txt
-#Set audio output to automatic
-amixer cset numid=3 0
-#Set USB Audio as default
-cp sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf
-#Set volume to 90%
-amixer sset 'PCM' 90%
-#This file is if we have problems with sound cards in the most recent RPI 3B+ devices, put in /etc/modprobe.d/alsa-base.conf if needed
-mv /home/pi/tjbot_setup/alsa-base.conf /home/pi/Desktop/alsa-base.conf
+configureHardware(){
+	echo "start_x=1" | tee -a /boot/config.txt # Activating camera
+	amixer cset numid=3 0 # #Set audio output to automatic
+	cp ./config_files/sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf # Set USB Audio as default
+	amixer sset 'PCM' 100% # Set volume to 100%
+}
 
-
-# Updating nodejs and nodered
-git clone https://github.com/node-red/raspbian-deb-package.git
-cd raspbian-deb-package/resources/
-# Executing with user pi
-su pi -c " ./update-nodejs-and-nodered"
-echo "Finalizando actualizacíon nodejs y nodered"
-sleep 5
+# Update nodejs and node-red
+updateNode(){
+	git clone https://github.com/node-red/raspbian-deb-package.git ./config_files
+	cd ./config_files/raspbian-deb-package/resources/
+	su pi -c " ./update-nodejs-and-nodered" # Executing with user pi
+	echo "Finalizando actualizacíon nodejs y nodered"
+	sleep 5
+}
 
 # Installing TJBot nodes
-node-red-stop
-cd /home/pi/.node-red
-mkdir /home/pi/.node-red/nodes
-cd /home/pi/.node-red/nodes
-git clone https://github.com/JairLizarraga-IBM/nodes-tjbot-latam
-cd /home/pi/.node-red/nodes/nodes-tjbot-latam
-npm install --unsafe-perm
+installTJNodes(){
+	node-red-stop
+	mkdir ~/.node-red/nodes
+	git clone https://github.com/JairLizarraga/nodes-tjbot-latam ~/.node-red/nodes
+	cd ~/.node-red/nodes/nodes-tjbot-latam
+	npm install --unsafe-perm
+}
+
 
 # Node red service configuration
-sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
-systemctl daemon-reload
-systemctl enable nodered.service
-node-red-start &
-echo "Iniciando servidor"
-sleep 10
-node-red-stop
-echo "Deteniendo servidor"
-sleep 5
+configureNodeRedService(){
+	sed -i -e 's/User=pi/User=root/g' /lib/systemd/system/nodered.service
+	systemctl daemon-reload
+	systemctl enable nodered.service
+	node-red-start &
+	echo "Iniciando servidor"
+	sleep 10
+	node-red-stop
+	echo "Deteniendo servidor"
+	sleep 5
+	# Renaming user at node-red service
+	sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
+	sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/pi\/.node-red\/nodes',/g" /root/.node-red/settings.js
+}
 
-# Renaming user at node-red service
-sed -i -e "s/\/\/userDir: '\/home\/nol\/.node-red\/'/userDir: '\/home\/pi\/.node-red\/'/g" /root/.node-red/settings.js
-sed -i -e "s/\/\/nodesDir: '\/home\/nol\/.node-red\/nodes',/nodesDir: '\/home\/pi\/.node-red\/nodes',/g" /root/.node-red/settings.js
-
-#Enable speakable ip address on startup with a crontab task, we use the user pi for this job
-su pi -c "(crontab -l 2>/dev/null; echo '@reboot /home/pi/tjbot_setup/getipaddress.sh') | crontab -"
 
 #Enable Wi-Fi bootable configuration
-cp /home/pi/tjbot_setup/mi_red_wifi.default.txt /boot/
-cp /home/pi/tjbot_setup/mi_red_wifi.txt /boot/
-cp /home/pi/tjbot_setup/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
+enableAddWiFiFromBoot(){
+	cp ~/tjbot_setup/config_files/mi_red_wifi.default.txt /boot/
+	cp ~/tjbot_setup/config_files/mi_red_wifi.txt /boot/
+	cp ~/tjbot_setup/config_files/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
+}
 
+resources
+enableSSH
+updateNode
+installTJNodes
+configureNodeRedService
+enableAddWiFiFromBoot
+# Enable to speak IP address using crontab using pi user
+su pi -c "(crontab -l 2>/dev/null; echo '@reboot ~/tjbot_setup/config_files/getipaddress.sh') | crontab -"
 
 reboot now
