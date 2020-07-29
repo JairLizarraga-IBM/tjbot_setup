@@ -6,7 +6,7 @@ installResources(){
 	apt-get install espeak -y
 	apt-get install speech-dispatcher -y
 	apt-get install matchbox-keyboard -y
-	cp ./config_files/keyboard.sh ~/Desktop/
+	cp ./config_files/keyboard.sh /home/pi/Desktop/
 }
 
 # Enable ssh to start at boot
@@ -24,8 +24,8 @@ configureHardware(){
 
 # Update nodejs and node-red
 updateNode(){
-	git clone https://github.com/node-red/raspbian-deb-package.git ./config_files
-	cd ./config_files/raspbian-deb-package/resources/
+	git clone https://github.com/node-red/raspbian-deb-package.git ./config_files/node-red
+	cd ./config_files/node-red/resources/
 	su pi -c " ./update-nodejs-and-nodered" # Executing with user pi
 	echo "Finalizando actualizacíon nodejs y nodered"
 	sleep 5
@@ -65,8 +65,9 @@ enableAddWiFiFromBoot(){
 	cp ~/tjbot_setup/config_files/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
 }
 
-resources
+installResources
 enableSSH
+configureHardware
 updateNode
 installTJNodes
 configureNodeRedService
