@@ -1,13 +1,10 @@
 #!/bin/sh
 # Script that enables TJBot project in a new recent Raspbian OS installation.
 
-#Update dependences and install text to speech app
+#Update dependences and install text to speech offline app
 installAccesibility(){
 	apt-get install espeak -y
 	apt-get install speech-dispatcher -y
-	apt-get install matchbox-keyboard -y
-	cp /home/pi/tjbot_setup/config_files/keyboard.sh /home/pi/Desktop/
-	chmod +x /home/pi/Desktop/keyboard.sh
 }
 
 # Enable ssh to start at boot
@@ -20,13 +17,14 @@ enableSSH(){
 configureHardwareComponents(){
 	echo "start_x=1" | tee -a /boot/config.txt # Activating camera
 	cp /home/pi/tjbot_setup/config_files/sound.blacklist.conf /etc/modprobe.d/sound.blacklist.conf # Set USB Audio as default
+	# Reiniciar
 	amixer cset numid=3 0 # #Set audio output to automatic
 	amixer sset 'PCM' 100% # Set volume to 100%
 }
 
 # Update nodejs and node-red
 updateNode(){
-	git clone https://github.com/node-red/linux-installers.git /home/pi/tjbot_setup/config_files/
+	git clone https://github.com/node-red/linux-installers.git /home/pi/tjbot_setup/config_files/linux-installers
 	su pi -c " /home/pi/tjbot_setup/config_files/linux-installers/deb/update-nodejs-and-nodered" # Executing with user pi
 	echo "Finalizada actualizacíon nodejs y nodered"
 }
@@ -62,13 +60,13 @@ enableAddWiFiFromBoot(){
 	cp /home/pi/tjbot_setup/config_files/mi_red_wifi.default.txt /boot/
 	cp /home/pi/tjbot_setup/config_files/mi_red_wifi.txt /boot/
 	cp /home/pi/tjbot_setup/config_files/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.default.conf
+	chmod +x /home/pi/tjbot_setup/config_files/getipaddress.sh
 }
 
 apt-get update
-apt-get upgrade
 installAccesibility
 enableSSH
-configureHardware
+configureHardwareComponents
 updateNode
 installTJNodes
 configureNodeRedService
